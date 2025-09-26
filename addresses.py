@@ -295,6 +295,95 @@ minigame_flags = {
     "Amount of waves in 4-Flagged Minigames (40)": 0x009466,
 }
 
+minigame_plants = {
+    "(Level 1-5 & Wall-nut Bowling) Wall-nut": 0x02308F,
+    "(Level 1-5 & Wall-nut Bowling) Explode-o-nut": 0x02309F,
+    "(Level 1-10) Peashooter?": 0x022E32,
+    "(Level 1-10) Repeater": [0x022E36, 0x022E5B],
+    "(Level 1-10) Cherry Bomb": 0x022E42,
+    "(Level 1-10) Wall-nut": 0x022E4E,
+    "(Level 1-10) Snow Pea": 0x022E63,
+    "(Level 1-10) Chomper": 0x022E6E,
+    "(Level 1-10) Potato Mine": 0x022E7A,
+    "(Level 2-10) Doom-shroom": 0x022E8C,
+    "(Level 2-10) Grave Buster": 0x022E94,
+    "(Level 2-10) Ice-shroom": 0x022EA0,
+    "(Level 2-10) Hypno-shroom": 0x022EB0,
+    "(Level 2-10) Scaredy-shroom": 0x022EBC,
+    "(Level 2-10) Fume-shroom": 0x022EC5,
+    "(Level 2-10) Puff-shroom": 0x022ED0,
+    "(Level 3-5 & Big Trouble Little Zombie) Peashooter?": 0x0230C6,
+    "(Level 3-5 & Big Trouble Little Zombie) Lily Pad": 0x0230CA,
+    "(Level 3-5 & Big Trouble Little Zombie) Wall-Nut": 0x0230D7,
+    "(Level 3-5 & Big Trouble Little Zombie) Cherry Bomb": 0x0230EB,
+    "(Level 3-10) Lily Pad": 0x022EEB,
+    "(Level 3-10) Squash": 0x022EF6,
+    "(Level 3-10) Threepeater": 0x022F02,
+    "(Level 3-10) Tangle Kelp": 0x022F0E,
+    "(Level 3-10) Jalapeno": 0x022F17,
+    "(Level 3-10) Spikeweed": 0x022F1E,
+    "(Level 3-10) Torchwood": 0x022F2A,
+    "(Level 3-10) Tall-Nut": 0x022F36,
+    "(Level 4-10) Sea-shroom": 0x022F60,
+    "(Level 4-10) Magnet-shroom": 0x022F6C,
+    "(Level 4-10) Blover": 0x022F78,
+    "(Level 4-10) Cactus": 0x022F84,
+    "(Level 4-10) Starfruit": 0x022F94,
+    "(Level 4-10) Split Pea": 0x022FA0,
+    "(Level 4-10) Pumpkin": 0x022FAC,
+    "(Bungee Blitz) Flower Pot": 0x023160,
+    "(Bungee Blitz) Chomper": 0x023170,
+    "(Bungee Blitz) Pumpkin": 0x023180,
+    "(Bungee Blitz) Cherry Bomb": 0x023190,
+    "(Level 5-10 & Dr. Zomboss Revenge (given early in constant)) Cabbage-pult": 0x01F4A6,
+    "(Level 5-10 & Dr. Zomboss Revenge (given early in constant)) Jalapeno": 0x01F4B6,
+    "(Level 5-10 & Dr. Zomboss Revenge (given early in constant)) Cabbage-pult": 0x01F4C6,
+    "(Level 5-10 & Dr. Zomboss Revenge (given early in constant)) Ice-shroom": 0x01F4D6,
+    "(Level 5-10 & Dr. Zomboss Revenge) Flower Pot": 0x022FCD,
+    "(Level 5-10 & Dr. Zomboss Revenge) Melon-pult": 0x022FDD,
+    "(Level 5-10 & Dr. Zomboss Revenge) Jalapeno": 0x022FE6,
+    "(Level 5-10 & Dr. Zomboss Revenge) Cabbage-pult": 0x022FF5,
+    "(Level 5-10 & Dr. Zomboss Revenge) Kernel-pult": 0x023001,
+    "(Level 5-10 & Dr. Zomboss Revenge) Ice-shroom": 0x02300D,
+    "(Invisi-ghoul (early given in constant)) Peashooter": 0x01F587,
+    "(Invisi-ghoul (early given in constant)) Ice-shroom": 0x01F597,
+    "(Invisi-ghoul) Peashooter": 0x02305B,
+    "(Invisi-ghoul) Wall-nut": 0x02326A,
+    "(Invisi-ghoul) Kernel-pult": 0x023272,
+    "(Invisi-ghoul) Squash": 0x02327E,
+    "(Invisi-ghoul) Lily Pad": 0x02328A,
+    "(Invisi-ghoul) Ice-shroom": 0x02329A,
+    "(Portal Combat) Cactus": 0x0231AC,
+    "(Portal Combat) Peashooter": 0x0231B5,
+    "(Portal Combat) Repeater": 0x0231C4,
+    "(Portal Combat) Torchwood": 0x0231D0,
+    "(Portal Combat) Wall-nut": 0x0231E0,
+    "(Portal Combat) Cherry Bomb": 0x0231EC,
+    "(Dark Stormy Night) Peashooter": 0x023109,
+    "(Dark Stormy Night) Lily Pad": 0x023110,
+    "(Dark Stormy Night) Cactus": 0x023120,
+    "(Dark Stormy Night) Puff-shroom": 0x023130,
+    "(Dark Stormy Night) Cherry Bomb": 0x023140,
+    "(Column Like You See ’Em (early given in constant)) Potato Mine": 0x01F519,
+    "(Column Like You See ’Em (early given in constant)) Tall-nut": 0x01F529,
+    "(Column Like You See ’Em (early given in constant)) Melon-pult": 0x01F539,
+    "(Column Like You See ’Em (early given in constant)) Magnet-shroom": 0x01F549,
+    "(Column Like You See ’Em (early given in constant)) Coffee Bean": 0x01F559,
+    "(Column Like You See ’Em (early given in constant)) Melon-pult": 0x01F569,
+    "(Column Like You See ’Em) Flower Pot": 0x02320A,
+    "(Column Like You See ’Em) Melon-pult": 0x02321A,
+    "(Column Like You See ’Em) Chomper": 0x023223,
+    "(Column Like You See ’Em) Pumpkin": 0x02322E,
+    "(Column Like You See ’Em) Jalapeno": 0x02323B,
+    "(Column Like You See ’Em) Squash": 0x023246,
+    "(Wall-nut Bowling 2) Wall-nut": 0x023054,
+    "(Wall-nut Bowling 2) Explode-o-nut": 0x02306D,
+    "(Wall-nut Bowling 2) Giant Wall-nut": 0x023075,
+    "(Can You Dig It?) Peashooter": 0x02302F
+}
+
+
+
 spawn_rate_presets = {
     "Basic Spawn Rate (117)": 0x00983A,
     "Spawn Rate Multiplier (73)": 0x00983E,
@@ -313,11 +402,33 @@ spawn_rate_values = {
 
 # Multi-byte replacements for checkboxes
 multi_byte_replacements = {
-    "Toggle Sun Limit": {
+    "Disable Sun Limit": {
         "addresses": 0x030A25,
         "original_bytes": bytes.fromhex("C7 80 60 55 00 00 06 27 00 00"),
         "replacement_bytes": bytes.fromhex("90 90 90 90 90 90 90 90 90 90"),
         "description": "Toggle Sun Limit"
+    },
+    "Disable Money Limit": {
+        "addresses": 0x30A7A,
+        "original_bytes": bytes.fromhex("C7 40 28 9F 86 01 00"),
+        "replacement_bytes": bytes.fromhex("90 90 90 90 90 90 90"),
+        "description": "Toggle Money Limit"
     }
+}
+
+# Sizes for each category (in bytes)
+sizes = {
+    "Sun Cost": 4,
+    "Recharge": 4,
+    "Action Rates": 4,
+    "Health & Armor": 4,
+    "Projectiles": 4,
+    "Damage": 4,
+    "First Zombie Arrival": 4,
+    "Currency Prices": 4,
+    "Prize Bags": 4,
+    "Shop Prices": 1,
+    "Minigame Flags": 4,
+    "Minigame Plants": 1,
 }
 

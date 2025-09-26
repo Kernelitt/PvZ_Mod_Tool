@@ -7,9 +7,6 @@ from adventure_spawn import AdventureSpawnEditor
 from file_io_utils import file_io_manager
 import addresses
 
-# Increase the limit for integer string conversion to handle large memory values
-sys.set_int_max_str_digits(0)  # 0 means no limit
-
 class StartMenu():
     def __init__(self, project_manager):
         self.project_manager = project_manager
@@ -59,18 +56,8 @@ class MainMenu():
         tab2 = Frame(self.notebook)
         self.notebook.add(tab2, text="Address Editor")
 
-        # Create address editor in tab2
-        self.address_editor = AddressEditor(tab2, self)
-
-        # Third tab with spawn rate presets
-        tab3 = Frame(self.notebook)
-        self.notebook.add(tab3, text="Adventure Spawn")
-
-        # Create spawn rate presets editor in tab3
-        self.spawn_rate_editor = AdventureSpawnEditor(tab3, self.project_path, self)
-
         # Global edit mode selection (moved to first tab)
-        self.global_edit_mode_var = StringVar(value="process")
+        self.global_edit_mode_var = StringVar(value="exe")
 
         # Add global mode selection to first tab
         mode_frame = Frame(tab1)
@@ -90,6 +77,18 @@ class MainMenu():
         # Кнопка выбора exe файла
         self.select_exe_button = Button(mode_frame, text="Выбрать EXE", command=self.select_exe_file)
         self.select_exe_button.pack(side=LEFT, padx=5)
+
+        self.exe_file_path = project_manager.project_path + "/PlantsVsZombies.exe"
+        print(self.exe_file_path)
+        # Create address editor in tab2
+        self.address_editor = AddressEditor(tab2, self)
+
+        # Third tab with spawn rate presets
+        tab3 = Frame(self.notebook)
+        self.notebook.add(tab3, text="Adventure Spawn")
+
+        # Create spawn rate presets editor in tab3
+        self.spawn_rate_editor = AdventureSpawnEditor(tab3, self.project_path, self)
 
         # Add buttons for general actions in tab1
         Button(tab1, text="Launch PlantsVsZombies.exe", command=lambda: self.launch_tool(os.path.join(self.project_path, "PlantsVsZombies.exe"), "PlantsVsZombies.exe")).pack(pady=5, fill=X)
@@ -221,7 +220,7 @@ class AddressEditor:
         self.main_menu = main_menu
         self.process_handle = None
         self.current_process_id = None
-        self.exe_file_path = None
+        self.exe_file_path = main_menu.exe_file_path
         self.edit_mode = "exe"  # "process" или "exe"
 
         # Словарь категорий и их адресов
@@ -237,7 +236,11 @@ class AddressEditor:
             "Prize Bags": addresses.prize_bags,
             "Shop Prices": addresses.shop_prices,
             "Minigame Flags": addresses.minigame_flags,
+            "Minigame Plants": addresses.minigame_plants,
         }
+
+        # Sizes for each category
+        self.sizes = addresses.sizes
 
         self.create_widgets()
 
@@ -311,10 +314,6 @@ class AddressEditor:
         self.status_label = Label(self.parent, text="Готов к работе", fg="green")
         self.status_label.pack(pady=5)
 
-
-
-        self.checkbox_frame.pack(pady=10, padx=10, fill=X)
-
         # Создать чекбоксы для каждого multi-byte replacement
         for address_name, address_info in addresses.multi_byte_replacements.items():
             if isinstance(address_info, dict):
@@ -326,17 +325,11 @@ class AddressEditor:
                 replacement_frame = Frame(self.checkbox_frame)
                 replacement_frame.pack(fill=X, pady=2)
 
-                cb = Checkbutton(replacement_frame, text=address_name, variable=var)
+                cb = Checkbutton(replacement_frame, text=address_name, variable=var, command=lambda name=address_name: self.toggle_multi_byte(name))
                 cb.pack(side=LEFT)
-                file_path = self.main_menu.project_path + "/PlantsVsZombies.exe"
-                with open(file_path, "rb") as f:
-                    f.seek(address_info["addresses"])
-                    value = f.read(10)
-                    if value == address_info["original_bytes"]:
-                        var.set(0)
-                    else:
-                        var.set(1)
-                self.checkbox_widgets[address_name] = cb
+
+        # Set initial states
+        self.refresh_checkboxes()
 
 
 
@@ -361,6 +354,25 @@ class AddressEditor:
                     self.status_label.config(text=f"Режим EXE: {os.path.basename(self.exe_file_path)}", fg="green")
             else:
                 self.status_label.config(text="Режим процесса", fg="green")
+        # Refresh checkboxes when mode changes
+        self.refresh_checkboxes()
+
+    def refresh_checkboxes(self):
+        """Обновить состояния чекбоксов на основе текущих байтов в exe файле"""
+        for address_name, address_info in addresses.multi_byte_replacements.items():
+            if isinstance(address_info, dict):
+                address = address_info["addresses"]
+                original_bytes = address_info["original_bytes"]
+                size = len(original_bytes)
+
+                current_bytes = file_io_manager.read_file_data(self.exe_file_path, address, size)
+
+                if current_bytes and len(current_bytes) == size:
+                    # Check if all bytes match original
+                    is_modified = any(current_bytes[i] != original_bytes[i] for i in range(size))
+                    if address_name in self.checkbox_vars:
+                        self.checkbox_vars[address_name].set(1 if is_modified else 0)
+
 
     def on_address_changed(self, event):
         """Обработчик изменения адреса"""
@@ -391,10 +403,18 @@ class AddressEditor:
         # Обычные категории
         address = self.categories[category][address_name]
 
+        # Convert address to int if it's a string
+        if isinstance(address, str):
+            if '/' in address:
+                address = int(address.split('/')[0], 16)
+            else:
+                address = int(address, 16)
+
+        size = self.sizes.get(category, 4)
         if global_mode == "process":
-            value = file_io_manager.read_memory_data(address, 4)
+            value = file_io_manager.read_memory_data(address, size)
         else:
-            value = file_io_manager.read_file_data(self.exe_file_path, address, 4)
+            value = file_io_manager.read_file_data(self.exe_file_path, address, size)
 
         if value is not None:
             # Handle bytes objects by converting to integer
@@ -443,14 +463,22 @@ class AddressEditor:
             # Обычные категории
             address = self.categories[category][address_name]
 
+            # Convert address to int if it's a string
+            if isinstance(address, str):
+                if '/' in address:
+                    address = int(address.split('/')[0], 16)
+                else:
+                    address = int(address, 16)
+
+            size = self.sizes.get(category, 4)
             if global_mode == "process":
-                if file_io_manager.write_memory_data(address, new_value, size=4):
+                if file_io_manager.write_memory_data(address, new_value, size=size):
                     self.status_label.config(text=f"Значение {new_value} записано успешно", fg="green")
                     self.refresh_current_value()  # Обновить отображение
                 else:
                     self.status_label.config(text="Ошибка записи в память", fg="red")
             else:
-                if file_io_manager.write_file_data(self.exe_file_path, address, new_value, size=4):
+                if file_io_manager.write_file_data(self.exe_file_path, address, new_value, size=size):
                     self.status_label.config(text=f"Значение {new_value} записано в файл успешно", fg="green")
                     self.refresh_current_value()  # Обновить отображение
                 else:
@@ -559,6 +587,33 @@ class AddressEditor:
             self.refresh_current_value()  # Обновить отображение текущих значений
         else:
             self.status_label.config(text="Ошибка применения предустановки", fg="red")
+
+    def toggle_multi_byte(self, address_name):
+        """Переключить multi-byte replacement"""
+        address_info = addresses.multi_byte_replacements.get(address_name)
+
+        if not address_info:
+            return
+
+        address = address_info["addresses"]
+        original_bytes = address_info["original_bytes"]
+        replacement_bytes = address_info["replacement_bytes"]
+        size = len(original_bytes)
+
+        is_checked = self.checkbox_vars[address_name].get()
+
+        if not self.exe_file_path:
+            self.status_label.config(text="Выберите EXE файл для редактирования", fg="orange")
+            return
+
+        success = file_io_manager.write_file_data(self.exe_file_path, address, replacement_bytes if is_checked else original_bytes, size=size)
+
+        if success:
+            self.status_label.config(text=f"{address_name} {'включено' if is_checked else 'отключено'}", fg="green")
+        else:
+            self.status_label.config(text=f"Ошибка применения {address_name}", fg="red")
+            # Revert checkbox state
+            self.checkbox_vars[address_name].set(not is_checked)
 
 project_mn = ProjectManager()
 start_menu = StartMenu(project_mn)
